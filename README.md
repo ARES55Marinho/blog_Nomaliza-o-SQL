@@ -1,0 +1,1 @@
+# blog_Nomaliza-o-SQL
