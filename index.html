@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guia completo sobre normalização de bancos de dados relacionais, formas normais, desnormalização e modelagem de dados.">
+
+  <title>esquema — Normalização de Banco de Dados</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- CABEÇALHO -->
+  <header class="site-header" id="topo">
+    <a class="brand" href="#topo">
+      <span class="brand-icon">▤</span>
+      <span class="brand-name">esquema</span>
+      <span class="brand-tag">/ aprender para construir</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a class="active" href="#guia">Guia de estudo</a>
+      <a href="#equipe">Nossa equipe</a>
+      <a href="#referencias">Referências</a>
+      <span class="category-pill">BANCO DE DADOS</span>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- APRESENTAÇÃO E EQUIPE -->
+    <section class="hero" id="equipe">
+      <div class="hero-inner">
+
+        <div class="eyebrow-row">
+          <span class="eyebrow">● GUIA ESSENCIAL · MODELAGEM RELACIONAL</span>
+          <span class="mono muted">DO CONCEITO À PRÁTICA</span>
+        </div>
+
+        <h1>Normalização de<br>Banco de Dados</h1>
+
+        <p class="hero-description">
+          Aprenda a organizar informações, reduzir redundâncias e construir
+          bancos de dados consistentes, compreendendo as formas normais e
+          quando a desnormalização pode ser útil.
+        </p>
+
+        <div class="team-grid">
+
+          <article class="member-card">
+            <img
+              class="member-photo"
+              src="https://www.figma.com/api/mcp/asset/594df9b9-800f-44ba-9be8-037700cf2edf.png"
+              alt="Foto de Dhavi Francisco do Vale Ferreira"
+            >
+            <div class="member-info">
+              <span class="member-number">INTEGRANTE 01</span>
+              <h2>Dhavi Francisco do Vale Ferreira</h2>
+              <a href="https://www.linkedin.com/in/dhavi-francisco-869b0742a/" target="_blank" rel="noopener noreferrer">
+                LinkedIn do integrante ↗
+              </a>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <img
+              class="member-photo"
+              src="https://www.figma.com/api/mcp/asset/63a016ba-a008-43d6-ac22-007bb7247bff.png"
+              alt="Foto de Samuel Costa Domingues"
+            >
+            <div class="member-info">
+              <span class="member-number">INTEGRANTE 02</span>
+              <h2>Samuel Costa Domingues</h2>
+              <a href="https://www.linkedin.com/in/samuel-costa-domingues-5850b22a4/" target="_blank" rel="noopener noreferrer">
+                LinkedIn do integrante ↗
+              </a>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <img
+              class="member-photo"
+              src="https://www.figma.com/api/mcp/asset/c1f09e5e-78bf-4eb5-b665-84f7ee1f1011.png"
+              alt="Foto de Matheus Henrique Barros da Costa"
+            >
+            <div class="member-info">
+              <span class="member-number">INTEGRANTE 03</span>
+              <h2>Matheus Henrique Barros da Costa</h2>
+              <a href="https://www.linkedin.com/in/matheus-henrique-1a206b187/" target="_blank" rel="noopener noreferrer">
+                LinkedIn do integrante ↗
+              </a>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <img
+              class="member-photo"
+              src="https://www.figma.com/api/mcp/asset/6e09a897-91e0-43a5-88e6-d5861925b0b3.png"
+              alt="Foto de Hiago da Silva Marinho"
+            >
+            <div class="member-info">
+              <span class="member-number">INTEGRANTE 04</span>
+              <h2>Hiago da Silva Marinho</h2>
+              <a href="https://www.linkedin.com/in/hiago-da-silva-marinho-921b92319/?isSelfProfile=false" target="_blank" rel="noopener noreferrer">
+                LinkedIn do integrante ↗
+              </a>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="hero-bottom">
+          <p>Menos repetição. Mais consistência. Um passo de cada vez.</p>
+          <a href="#guia" class="read-link">Explore o guia ↓</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONTEÚDO DO GUIA -->
+    <section class="editorial" id="guia">
+
+      <!-- NAVEGAÇÃO LATERAL -->
+      <aside class="contents">
+        <p class="section-label">NESTE GUIA</p>
+
+        <a href="#introducao"><span>01</span> Por que normalizar?</a>
+        <a href="#conceito"><span>02</span> O conceito</a>
+        <a href="#formas"><span>03</span> 1FN e 2FN</a>
+        <a href="#terceira"><span>04</span> Terceira forma normal</a>
+        <a href="#bcnf"><span>05</span> BCNF</a>
+        <a href="#quarta"><span>06</span> Quarta forma normal</a>
+        <a href="#quinta"><span>07</span> Quinta forma normal</a>
+        <a href="#desnormalizacao"><span>08</span> Desnormalização</a>
+        <a href="#exemplo"><span>09</span> Exemplo prático</a>
+        <a href="#beneficios"><span>10</span> Benefícios</a>
+        <a href="#conclusao"><span>11</span> Conclusão</a>
+        <a href="#referencias"><span>12</span> Referências</a>
+
+        <div class="reading-note">
+          <span class="book-icon">▤</span>
+          <h3>Como usar este guia</h3>
+          <p>
+            Leia as seções em ordem e acompanhe os exemplos. Cada etapa
+            apresenta um problema de modelagem e explica como organizar
+            melhor os dados.
+          </p>
+        </div>
+
+        <div class="legend">
+          <span class="legend-dot"></span>
+          Conceito importante
+        </div>
+
+        <div class="legend">
+          <span class="legend-line"></span>
+          Exemplo de estrutura
+        </div>
+      </aside>
+
+      <article class="article">
+
+        <!-- 01: INTRODUÇÃO -->
+        <section class="article-section" id="introducao">
+          <div class="section-kicker">
+            <span>01</span>
+            FUNDAMENTOS
+          </div>
+
+          <h2>Por que a normalização importa?</h2>
+
+          <p>
+            Quando um banco de dados cresce sem uma estrutura bem definida,
+            a mesma informação pode aparecer repetida em várias linhas.
+            Isso dificulta a manutenção e aumenta a possibilidade de
+            inconsistências.
+          </p>
+
+          <p>
+            A normalização é um processo de organização das tabelas que
+            reduz redundâncias e ajuda a manter os dados corretos. Ela
+            organiza as informações em estruturas relacionadas de acordo
+            com suas dependências.
+          </p>
+
+          <div class="anomaly-grid">
+            <div class="anomaly">
+              <span class="anomaly-symbol">＋</span>
+              <h3>Anomalia de inserção</h3>
+              <p>
+                A estrutura da tabela pode dificultar o cadastro de uma
+                informação sem que outros dados desnecessários sejam
+                registrados junto dela.
+              </p>
+            </div>
+
+            <div class="anomaly">
+              <span class="anomaly-symbol">⟳</span>
+              <h3>Anomalia de atualização</h3>
+              <p>
+                Uma informação repetida precisa ser alterada em vários
+                lugares, aumentando o risco de divergências.
+              </p>
+            </div>
+
+            <div class="anomaly">
+              <span class="anomaly-symbol">⌫</span>
+              <h3>Anomalia de exclusão</h3>
+              <p>
+                Apagar um registro pode remover, por acidente, outra
+                informação que deveria ser preservada.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02: CONCEITO -->
+        <section class="article-section" id="conceito">
+          <div class="section-kicker">
+            <span>02</span>
+            CONCEITO
+          </div>
+
+          <h2>O que é normalização?</h2>
+
+          <p>
+            Normalizar significa aplicar regras de modelagem para organizar
+            atributos em tabelas, estabelecer relacionamentos e evitar que
+            o mesmo fato seja armazenado de maneira desnecessariamente
+            repetida.
+          </p>
+
+          <p>
+            As formas normais são etapas progressivas. Cada uma estabelece
+            condições específicas para a organização dos dados. Entre as
+            mais estudadas estão a primeira, a segunda e a terceira formas
+            normais, a forma normal de Boyce-Codd, a quarta e a quinta
+            formas normais.
+          </p>
+
+          <div class="callout">
+            <strong>Ideia central</strong>
+            <p>
+              Cada informação deve ser armazenada no lugar adequado e cada
+              tabela deve representar um assunto bem definido.
+            </p>
+          </div>
+        </section>
+
+        <!-- 03: PRIMEIRA E SEGUNDA FORMAS NORMAIS -->
+        <section class="article-section" id="formas">
+          <div class="section-kicker">
+            <span>03</span>
+            PRIMEIRA E SEGUNDA FORMAS NORMAIS
+          </div>
+
+          <h2>Organizando os dados em etapas</h2>
+
+          <!-- 1FN -->
+          <div class="normal-form">
+            <div class="normal-title">
+              <span class="nf-badge">1FN</span>
+              <h3>Primeira Forma Normal</h3>
+            </div>
+
+            <p>
+              Uma tabela está na primeira forma normal quando cada campo
+              contém um único valor e não existem grupos repetidos de
+              colunas.
+            </p>
+
+            <div class="table-caption">
+              <span>ANTES DA NORMALIZAÇÃO</span>
+              <span class="status-bad">Não recomendado</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID aluno</th>
+                    <th>Nome</th>
+                    <th>Disciplinas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>Ana</td>
+                    <td>Banco de Dados, Programação</td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>Caio</td>
+                    <td>Redes, Banco de Dados</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="table-note">
+              Problema: o campo Disciplinas armazena vários valores na mesma
+              célula.
+            </p>
+
+            <div class="table-caption">
+              <span>DEPOIS DA NORMALIZAÇÃO</span>
+              <span class="status-good">Valores atômicos</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID aluno</th>
+                    <th>Nome</th>
+                    <th>Disciplina</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>Ana</td>
+                    <td>Banco de Dados</td>
+                  </tr>
+                  <tr>
+                    <td>01</td>
+                    <td>Ana</td>
+                    <td>Programação</td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>Caio</td>
+                    <td>Redes</td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>Caio</td>
+                    <td>Banco de Dados</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 2FN -->
+          <div class="normal-form">
+            <div class="normal-title">
+              <span class="nf-badge">2FN</span>
+              <h3>Segunda Forma Normal</h3>
+            </div>
+
+            <p>
+              Para estar na segunda forma normal, uma tabela deve estar
+              na primeira forma normal e todos os atributos que não fazem
+              parte de uma chave candidata devem depender da chave inteira,
+              e não somente de uma parte de uma chave composta.
+            </p>
+
+            <h4 class="example-subtitle">
+              Exemplo: matrícula de alunos em cursos
+            </h4>
+
+            <p>
+              Considere uma tabela cuja chave primária é formada por
+              <strong>ID do aluno + ID do curso</strong>. O nome do aluno
+              depende apenas do ID do aluno, enquanto o nome do curso
+              depende apenas do ID do curso. Isso caracteriza dependências
+              parciais.
+            </p>
+
+            <div class="table-caption">
+              <span>ANTES · DEPENDÊNCIAS PARCIAIS</span>
+              <span class="status-bad">Não está na 2FN</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID aluno</th>
+                    <th>ID curso</th>
+                    <th>Nome do aluno</th>
+                    <th>Nome do curso</th>
+                    <th>Nota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>01</td>
+                    <td>C01</td>
+                    <td>Ana</td>
+                    <td>Banco de Dados</td>
+                    <td>9,0</td>
+                  </tr>
+                  <tr>
+                    <td>01</td>
+                    <td>C02</td>
+                    <td>Ana</td>
+                    <td>Programação</td>
+                    <td>8,5</td>
+                  </tr>
+                  <tr>
+                    <td>02</td>
+                    <td>C01</td>
+                    <td>Caio</td>
+                    <td>Banco de Dados</td>
+                    <td>7,5</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="table-note">
+              A chave composta identifica cada matrícula, mas os nomes do
+              aluno e do curso dependem apenas de partes dessa chave.
+            </p>
+
+            <div class="table-caption">
+              <span>DEPOIS · TABELA ALUNOS</span>
+              <span class="status-good">Dados separados</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID aluno (PK)</th>
+                    <th>Nome do aluno</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>01</td><td>Ana</td></tr>
+                  <tr><td>02</td><td>Caio</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>DEPOIS · TABELA CURSOS</span>
+              <span class="status-good">Dados separados</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID curso (PK)</th>
+                    <th>Nome do curso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>C01</td><td>Banco de Dados</td></tr>
+                  <tr><td>C02</td><td>Programação</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>DEPOIS · TABELA MATRÍCULAS</span>
+              <span class="status-good">Relacionamento preservado</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID aluno (FK)</th>
+                    <th>ID curso (FK)</th>
+                    <th>Nota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>01</td><td>C01</td><td>9,0</td></tr>
+                  <tr><td>01</td><td>C02</td><td>8,5</td></tr>
+                  <tr><td>02</td><td>C01</td><td>7,5</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <strong>O que mudou?</strong>
+              <p>
+                Os dados foram divididos em Alunos, Cursos e Matrículas.
+                A nota permanece em Matrículas porque depende da combinação
+                entre aluno e curso.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04: TERCEIRA FORMA NORMAL -->
+        <section class="article-section" id="terceira">
+          <div class="section-kicker">
+            <span>04</span>
+            TERCEIRA FORMA NORMAL
+          </div>
+
+          <h2>Eliminando dependências transitivas</h2>
+
+          <div class="normal-form">
+            <div class="normal-title">
+              <span class="nf-badge">3FN</span>
+              <h3>Terceira Forma Normal</h3>
+            </div>
+
+            <p>
+              A terceira forma normal exige que a tabela esteja na segunda
+              forma normal e que os atributos que não fazem parte de uma
+              chave não dependam transitivamente de uma chave candidata.
+            </p>
+
+            <h4 class="example-subtitle">
+              Exemplo: funcionários e departamentos
+            </h4>
+
+            <div class="table-caption">
+              <span>ANTES · DADOS REPETIDOS</span>
+              <span class="status-bad">Não está na 3FN</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID funcionário</th>
+                    <th>Funcionário</th>
+                    <th>ID departamento</th>
+                    <th>Departamento</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>01</td><td>Ana</td><td>D01</td><td>Financeiro</td></tr>
+                  <tr><td>02</td><td>Caio</td><td>D01</td><td>Financeiro</td></tr>
+                  <tr><td>03</td><td>Bruna</td><td>D02</td><td>Recursos Humanos</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="table-note">
+              O nome do departamento depende do ID do departamento, e não
+              diretamente do ID do funcionário.
+            </p>
+
+            <div class="table-caption">
+              <span>DEPOIS · FUNCIONÁRIOS</span>
+              <span class="status-good">Tabela organizada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID funcionário (PK)</th>
+                    <th>Funcionário</th>
+                    <th>ID departamento (FK)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>01</td><td>Ana</td><td>D01</td></tr>
+                  <tr><td>02</td><td>Caio</td><td>D01</td></tr>
+                  <tr><td>03</td><td>Bruna</td><td>D02</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>DEPOIS · DEPARTAMENTOS</span>
+              <span class="status-good">Tabela relacionada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID departamento (PK)</th>
+                    <th>Nome do departamento</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>D01</td><td>Financeiro</td></tr>
+                  <tr><td>D02</td><td>Recursos Humanos</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <strong>Resultado</strong>
+              <p>
+                O nome de cada departamento fica armazenado uma única vez
+                na tabela Departamentos. A tabela Funcionários referencia
+                o departamento por meio de uma chave estrangeira.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 05: BCNF -->
+        <section class="article-section" id="bcnf">
+          <div class="section-kicker">
+            <span>05</span>
+            FORMA NORMAL DE BOYCE-CODD
+          </div>
+
+          <h2>BCNF: uma regra mais rigorosa</h2>
+
+          <div class="normal-form">
+            <div class="normal-title">
+              <span class="nf-badge">BCNF</span>
+              <h3>Boyce-Codd Normal Form</h3>
+            </div>
+
+            <p>
+              A forma normal de Boyce-Codd (BCNF) é mais rigorosa que a
+              terceira forma normal. Para cada dependência funcional
+              não trivial X → Y, X deve ser uma superchave da relação.
+            </p>
+
+            <p>
+              Uma superchave é um conjunto de atributos capaz de identificar
+              unicamente cada registro. A BCNF ajuda a eliminar determinadas
+              redundâncias que ainda podem existir em tabelas que atendem
+              à terceira forma normal.
+            </p>
+
+            <h4 class="example-subtitle">
+              Exemplo: professor, disciplina e sala
+            </h4>
+
+            <p>
+              Considere as regras de um sistema acadêmico: cada professor
+              utiliza uma única sala, e a combinação de professor e
+              disciplina identifica uma atribuição.
+            </p>
+
+            <div class="table-caption">
+              <span>ANTES · SALA REPETIDA</span>
+              <span class="status-bad">Dependência problemática</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Professor</th><th>Disciplina</th><th>Sala</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Marcos</td><td>Banco de Dados</td><td>Sala 10</td></tr>
+                  <tr><td>Marcos</td><td>Programação</td><td>Sala 10</td></tr>
+                  <tr><td>Helena</td><td>Redes</td><td>Sala 20</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="table-note">
+              A regra Professor → Sala indica que o professor determina a
+              sala, mas Professor não é superchave da tabela original.
+            </p>
+
+            <div class="table-caption">
+              <span>DEPOIS · PROFESSORES</span>
+              <span class="status-good">Dependência separada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Professor (PK)</th><th>Sala</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Marcos</td><td>Sala 10</td></tr>
+                  <tr><td>Helena</td><td>Sala 20</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>DEPOIS · ATRIBUIÇÕES</span>
+              <span class="status-good">Relacionamento preservado</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Professor (FK)</th><th>Disciplina</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Marcos</td><td>Banco de Dados</td></tr>
+                  <tr><td>Marcos</td><td>Programação</td></tr>
+                  <tr><td>Helena</td><td>Redes</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <strong>Atenção</strong>
+              <p>
+                O exemplo pressupõe que cada professor utiliza uma única
+                sala. As dependências e as chaves precisam corresponder
+                às regras reais do sistema.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 06: QUARTA FORMA NORMAL -->
+        <section class="article-section" id="quarta">
+          <div class="section-kicker">
+            <span>06</span>
+            QUARTA FORMA NORMAL
+          </div>
+
+          <h2>4FN: eliminando dependências multivaloradas</h2>
+
+          <div class="normal-form">
+            <div class="normal-title">
+              <span class="nf-badge">4FN</span>
+              <h3>Quarta Forma Normal</h3>
+            </div>
+
+            <p>
+              A quarta forma normal exige que a tabela esteja na BCNF e
+              que não existam dependências multivaloradas não triviais,
+              exceto quando o determinante for uma superchave.
+            </p>
+
+            <p>
+              Esse problema aparece quando uma entidade possui dois ou mais
+              conjuntos independentes de valores. A combinação desses
+              conjuntos pode gerar linhas redundantes sem representar uma
+              relação real entre eles.
+            </p>
+
+            <h4 class="example-subtitle">
+              Exemplo: alunos, idiomas e hobbies
+            </h4>
+
+            <p>
+              Imagine que Ana fale dois idiomas e pratique dois hobbies.
+              Os idiomas e os hobbies são independentes: praticar natação
+              não significa que ela fale um idioma específico.
+            </p>
+
+            <div class="table-caption">
+              <span>ANTES · COMBINAÇÕES REPETIDAS</span>
+              <span class="status-bad">Não está na 4FN</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Aluno</th><th>Idioma</th><th>Hobby</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ana</td><td>Inglês</td><td>Natação</td></tr>
+                  <tr><td>Ana</td><td>Inglês</td><td>Leitura</td></tr>
+                  <tr><td>Ana</td><td>Espanhol</td><td>Natação</td></tr>
+                  <tr><td>Ana</td><td>Espanhol</td><td>Leitura</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="table-note">
+              Cada idioma aparece combinado com cada hobby, mesmo sem
+              haver dependência entre essas informações.
+            </p>
+
+            <div class="table-caption">
+              <span>DEPOIS · IDIOMAS DO ALUNO</span>
+              <span class="status-good">Conjunto independente</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Aluno</th><th>Idioma</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ana</td><td>Inglês</td></tr>
+                  <tr><td>Ana</td><td>Espanhol</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>DEPOIS · HOBBIES DO ALUNO</span>
+              <span class="status-good">Outro conjunto independente</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Aluno</th><th>Hobby</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ana</td><td>Natação</td></tr>
+                  <tr><td>Ana</td><td>Leitura</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <strong>Resultado</strong>
+              <p>
+                As tabelas passam a representar separadamente os idiomas
+                e os hobbies de cada aluno. Isso elimina combinações
+                artificiais e evita repetir informações sem necessidade.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07: QUINTA FORMA NORMAL -->
+        <section class="article-section" id="quinta">
+          <div class="section-kicker">
+            <span>07</span>
+            QUINTA FORMA NORMAL
+          </div>
+
+          <h2>5FN: decomposição sem perda de informação</h2>
+
+          <div class="normal-form">
+            <div class="normal-title">
+              <span class="nf-badge">5FN</span>
+              <h3>Quinta Forma Normal</h3>
+            </div>
+
+            <p>
+              A quinta forma normal, também chamada de forma normal de
+              projeção-junção, trata de situações em que uma tabela pode
+              ser dividida em tabelas menores e reconstruída por meio de
+              junções, sem perder informações nem criar combinações
+              indevidas.
+            </p>
+
+            <p>
+              Ela é especialmente relevante quando existem dependências
+              de junção complexas. A decomposição precisa ser justificada
+              pelas regras de negócio: não basta dividir uma tabela
+              arbitrariamente.
+            </p>
+
+            <h4 class="example-subtitle">
+              Exemplo: fornecedores, peças e projetos
+            </h4>
+
+            <p>
+              Imagine uma empresa que registra quais fornecedores fornecem
+              determinadas peças para determinados projetos. Considere a
+              regra de negócio de que uma combinação fornecedor-peça-projeto
+              é válida quando as três relações individuais correspondentes
+              são válidas.
+            </p>
+
+            <div class="table-caption">
+              <span>RELAÇÃO ORIGINAL</span>
+              <span class="status-bad">Tabela combinada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fornecedor</th>
+                    <th>Peça</th>
+                    <th>Projeto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>F01</td><td>P01</td><td>J01</td></tr>
+                  <tr><td>F01</td><td>P02</td><td>J01</td></tr>
+                  <tr><td>F02</td><td>P01</td><td>J02</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="table-note">
+              A decomposição em cinco formas normais só é válida se as
+              regras de junção do domínio garantirem a reconstrução exata
+              da relação original.
+            </p>
+
+            <div class="table-caption">
+              <span>RELAÇÃO FORNECEDOR-PEÇA</span>
+              <span class="status-good">Tabela relacionada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Fornecedor</th><th>Peça</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>F01</td><td>P01</td></tr>
+                  <tr><td>F01</td><td>P02</td></tr>
+                  <tr><td>F02</td><td>P01</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>RELAÇÃO FORNECEDOR-PROJETO</span>
+              <span class="status-good">Tabela relacionada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Fornecedor</th><th>Projeto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>F01</td><td>J01</td></tr>
+                  <tr><td>F02</td><td>J02</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-caption">
+              <span>RELAÇÃO PEÇA-PROJETO</span>
+              <span class="status-good">Tabela relacionada</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr><th>Peça</th><th>Projeto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>P01</td><td>J01</td></tr>
+                  <tr><td>P02</td><td>J01</td></tr>
+                  <tr><td>P01</td><td>J02</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout">
+              <strong>O ponto mais importante</strong>
+              <p>
+                A 5FN não significa apenas separar tabelas. A decomposição
+                deve preservar exatamente as combinações válidas quando
+                as tabelas são reunidas novamente por junções.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 08: DESNORMALIZAÇÃO -->
+        <section class="article-section" id="desnormalizacao">
+          <div class="section-kicker">
+            <span>08</span>
+            ESTRATÉGIA DE MODELAGEM
+          </div>
+
+          <h2>Desnormalização: quando repetir dados pode ser útil</h2>
+
+          <p>
+            A desnormalização é uma decisão de projeto que introduz
+            redundância de forma controlada em um banco de dados.
+            Ela pode ser utilizada para reduzir o custo de consultas
+            frequentes, diminuir a quantidade de junções ou melhorar
+            o desempenho de determinadas operações de leitura.
+          </p>
+
+          <p>
+            Ao contrário da normalização, que busca organizar os dados
+            e evitar redundâncias desnecessárias, a desnormalização aceita
+            alguma repetição quando existe uma necessidade de desempenho
+            comprovada.
+          </p>
+
+          <h4 class="example-subtitle">
+            Exemplo: pedidos e nomes de clientes
+          </h4>
+
+          <p>
+            Em um modelo normalizado, o pedido guarda o identificador
+            do cliente e a tabela Clientes armazena o nome. Para consultar
+            o nome do cliente junto ao pedido, é necessário relacionar
+            as tabelas.
+          </p>
+
+          <div class="table-caption">
+            <span>MODELO NORMALIZADO · CLIENTES</span>
+            <span class="status-good">Dados separados</span>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>ID cliente (PK)</th><th>Nome</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>C01</td><td>Ana Souza</td></tr>
+                <tr><td>C02</td><td>Caio Lima</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-caption">
+            <span>MODELO NORMALIZADO · PEDIDOS</span>
+            <span class="status-good">Chave estrangeira</span>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>ID pedido</th><th>ID cliente (FK)</th><th>Valor</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1001</td><td>C01</td><td>R$ 150,00</td></tr>
+                <tr><td>1002</td><td>C02</td><td>R$ 200,00</td></tr>
+                <tr><td>1003</td><td>C01</td><td>R$ 80,00</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Em um cenário de relatórios que consultam constantemente os
+            pedidos e o nome do cliente, uma estrutura desnormalizada
+            poderia armazenar também o nome do cliente na tabela de pedidos.
+          </p>
+
+          <div class="table-caption">
+            <span>EXEMPLO DESNORMALIZADO · PEDIDOS</span>
+            <span class="status-bad">Nome repetido</span>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID pedido</th>
+                  <th>ID cliente</th>
+                  <th>Nome do cliente</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1001</td><td>C01</td><td>Ana Souza</td><td>R$ 150,00</td></tr>
+                <tr><td>1002</td><td>C02</td><td>Caio Lima</td><td>R$ 200,00</td></tr>
+                <tr><td>1003</td><td>C01</td><td>Ana Souza</td><td>R$ 80,00</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout">
+            <strong>Vantagem e cuidado</strong>
+            <p>
+              A consulta pode ficar mais simples, mas o nome do cliente
+              fica repetido. Se ele mudar, todas as cópias relevantes
+              precisam permanecer consistentes. A desnormalização deve
+              ser aplicada com justificativa, testes e controle de
+              atualização.
+            </p>
+          </div>
+
+          <div class="benefit-grid">
+            <div>
+              <span>VANTAGEM</span>
+              <h3>Leituras mais rápidas</h3>
+              <p>
+                Pode reduzir junções e acelerar consultas específicas.
+              </p>
+            </div>
+
+            <div>
+              <span>RISCO</span>
+              <h3>Mais redundância</h3>
+              <p>
+                Pode aumentar o armazenamento e dificultar atualizações.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 09: EXEMPLO PRÁTICO -->
+        <section class="article-section" id="exemplo">
+          <div class="section-kicker">
+            <span>09</span>
+            APLICAÇÃO
+          </div>
+
+          <h2>Exemplo prático: um cadastro de cursos</h2>
+
+          <p>
+            Imagine uma tabela que registra matrículas, nomes de alunos,
+            cursos e nomes de instrutores. Se o nome do curso e o nome do
+            instrutor forem repetidos em cada matrícula, uma alteração
+            exigirá mudanças em muitas linhas.
+          </p>
+
+          <ol class="steps">
+            <li>
+              <span>1</span>
+              <div>
+                <strong>Identifique as entidades</strong>
+                <p>
+                  Separe aluno, curso, instrutor e matrícula conforme
+                  as regras do sistema.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span>2</span>
+              <div>
+                <strong>Defina as chaves</strong>
+                <p>
+                  Escolha identificadores únicos e determine como as
+                  tabelas se relacionam.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span>3</span>
+              <div>
+                <strong>Revise as dependências</strong>
+                <p>
+                  Confira se cada atributo depende da chave correta
+                  e evite repetir fatos.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span>4</span>
+              <div>
+                <strong>Valide o resultado</strong>
+                <p>
+                  Teste inclusões, atualizações e exclusões para confirmar
+                  a consistência dos dados.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <!-- 10: BENEFÍCIOS -->
+        <section class="article-section" id="beneficios">
+          <div class="section-kicker">
+            <span>10</span>
+            VANTAGENS
+          </div>
+
+          <h2>O que melhora com a normalização?</h2>
+
+          <div class="benefit-grid">
+            <div>
+              <span>01</span>
+              <h3>Menos redundância</h3>
+              <p>Evita armazenar o mesmo fato repetidas vezes.</p>
+            </div>
+
+            <div>
+              <span>02</span>
+              <h3>Mais consistência</h3>
+              <p>Reduz a chance de dados conflitantes após uma alteração.</p>
+            </div>
+
+            <div>
+              <span>03</span>
+              <h3>Manutenção clara</h3>
+              <p>Facilita entender as responsabilidades de cada tabela.</p>
+            </div>
+
+            <div>
+              <span>04</span>
+              <h3>Integridade melhor</h3>
+              <p>Relacionamentos e restrições ajudam a proteger os dados.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 11: CONCLUSÃO -->
+        <section class="article-section conclusion-section" id="conclusao">
+          <div class="section-kicker">
+            <span>11</span>
+            CONCLUSÃO
+          </div>
+
+          <h2>Organizar os dados é construir uma base confiável</h2>
+
+          <p>
+            A normalização é uma etapa fundamental da modelagem de bancos
+            de dados relacionais. Ela ajuda a estruturar as informações,
+            reduzir redundâncias desnecessárias e evitar anomalias de
+            inserção, atualização e exclusão.
+          </p>
+
+          <p>
+            Cada forma normal trata de um tipo de problema. A 1FN organiza
+            os valores em cada campo; a 2FN elimina dependências parciais;
+            a 3FN trata dependências transitivas; a BCNF exige que os
+            determinantes das dependências funcionais sejam superchaves;
+            a 4FN aborda dependências multivaloradas; e a 5FN trata de
+            dependências de junção.
+          </p>
+
+          <p>
+            A desnormalização, por sua vez, pode ser útil em cenários nos
+            quais o desempenho de consultas é prioritário. No entanto,
+            ela deve ser adotada de forma consciente, considerando os
+            impactos na consistência, na manutenção e no armazenamento.
+          </p>
+
+          <div class="takeaway">
+            <span>✓</span>
+            <p>
+              <strong>Conclusão:</strong> não existe apenas a tarefa de
+              dividir tabelas. O objetivo é representar corretamente as
+              regras do negócio, preservar os relacionamentos e escolher
+              uma estrutura que equilibre integridade, manutenção e
+              desempenho.
+            </p>
+          </div>
+
+          <p class="article-end">
+            Menos repetição. Mais consistência. Um passo de cada vez.
+          </p>
+        </section>
+
+        <!-- 12: REFERÊNCIAS -->
+        <section class="article-section references-section" id="referencias">
+          <div class="section-kicker">
+            <span>12</span>
+            FONTES DE PESQUISA
+          </div>
+
+          <h2>Referências utilizadas</h2>
+
+          <p>
+            Os materiais abaixo foram indicados como referências para
+            estudar e elaborar o conteúdo deste guia sobre normalização
+            de bancos de dados relacionais.
+          </p>
+
+          <div class="references-list">
+
+            <article class="reference-card">
+              <div class="reference-number">REFERÊNCIA 01</div>
+              <h3>Alura</h3>
+              <p>
+                Artigo sobre normalização de banco de dados e organização
+                da estrutura das tabelas.
+              </p>
+              <a href="https://www.alura.com.br/artigos/normalizacao-banco-de-dados-estrutura" target="_blank" rel="noopener noreferrer">
+                Ler artigo na Alura ↗
+              </a>
+              <span class="reference-url">alura.com.br</span>
+            </article>
+
+            <article class="reference-card">
+              <div class="reference-number">REFERÊNCIA 02</div>
+              <h3>DEV Community — Manu Coutinho</h3>
+              <p>
+                Material de apoio sobre normalização dos bancos de dados
+                relacionais e suas formas normais.
+              </p>
+              <a href="https://dev.to/manucoutinho/normalizacao-dos-bancos-de-dados-relacionais-handbook-3fg" target="_blank" rel="noopener noreferrer">
+                Ler artigo na DEV Community ↗
+              </a>
+              <span class="reference-url">dev.to</span>
+            </article>
+
+            <article class="reference-card">
+              <div class="reference-number">REFERÊNCIA 03</div>
+              <h3>IBM</h3>
+              <p>
+                Material explicativo sobre normalização de banco de dados
+                e princípios de organização das informações.
+              </p>
+              <a href="https://www.ibm.com/br-pt/think/topics/database-normalization" target="_blank" rel="noopener noreferrer">
+                Ler artigo na IBM ↗
+              </a>
+              <span class="reference-url">ibm.com</span>
+            </article>
+
+          </div>
+
+          <p class="references-note">
+            Os links levam aos materiais originais. Consulte as fontes
+            para obter explicações detalhadas e informações complementares.
+          </p>
+        </section>
+
+      </article>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+
+    <div class="footer-main">
+
+      <div class="footer-brand-column">
+        <a class="footer-brand" href="#topo">
+          <span class="brand-icon">▤</span>
+          <span>esquema</span>
+        </a>
+
+        <p class="footer-tagline">
+          Aprender para construir — um guia de modelagem relacional.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h2>Projeto</h2>
+        <a href="#guia">Conteúdo do guia</a>
+        <a href="#equipe">Nossa equipe</a>
+        <a href="#referencias">Referências utilizadas</a>
+      </div>
+
+      <div class="footer-column">
+        <h2>Repositório</h2>
+        <p>Consulte os arquivos e acompanhe o projeto no GitHub.</p>
+        <a
+          class="repository-link"
+          href="https://github.com/ARES55Marinho/blog_Nomaliza-o-SQL"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>↗</span>
+          Acessar repositório
+        </a>
+      </div>
+
+    </div>
+
+    <div class="footer-details">
+
+      <div class="footer-detail">
+        <span class="footer-label">LICENÇA</span>
+        <p>
+          Projeto acadêmico. Os direitos dos materiais de terceiros
+          pertencem aos respectivos autores.
+        </p>
+      </div>
+
+      <div class="footer-detail">
+        <span class="footer-label">CONTATO</span>
+        <p>
+          <a
+            href="https://github.com/ARES55Marinho/blog_Nomaliza-o-SQL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Entre em contato pelo repositório do GitHub
+          </a>
+        </p>
+      </div>
+
+      <div class="footer-detail">
+        <span class="footer-label">ÚLTIMA REVISÃO</span>
+        <p>19/10/2026</p>
+      </div>
+
+      <div class="footer-detail">
+        <span class="footer-label">REPOSITÓRIO</span>
+        <p>
+          <a
+            href="https://github.com/ARES55Marinho/blog_Nomaliza-o-SQL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Acessar projeto no GitHub ↗
+          </a>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 · Esquema — Projeto acadêmico</span>
+      <a href="#topo">Voltar ao topo ↑</a>
+    </div>
+
+  </footer>
+
+</body>
+</html>
