@@ -1385,3 +1385,14 @@ a:focus-visible {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Estilo das referências adicionais */
+.references-list li {
+    overflow-wrap: anywhere;
+}
+
+.references-list a {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
